@@ -91,7 +91,7 @@ public interface TransactionManger {
             fileChannel.position(0);
             ByteBuffer byteBuffer = ByteBuffer.wrap(new byte[TransactionMangerImpl.XID_HEADER_LENGTH]);
             fileChannel.read(byteBuffer);
-            System.out.println(Parser.parseLong(byteBuffer.array()));
+
         } catch (IOException e) {
             e.printStackTrace();
         }
