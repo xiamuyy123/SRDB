@@ -12,10 +12,11 @@ public class Test {
         byteBuffer.putLong(15000);
         System.out.println(ByteBuffer.wrap(byteBuffer.array(),0,8).getLong());
 //        TransactionManger.create("test");
-        TransactionMangerImpl transactionManger = TransactionManger.open("test");
-        long tx = transactionManger.begin();
+//        TransactionMangerImpl transactionManger = TransactionManger.open("test");
+//        long tx = transactionManger.begin();
 //        System.out.println(transactionManger.isActive(tx));
 //        transactionMa
+        TransactionManger.create("test1");
 
     }
 }

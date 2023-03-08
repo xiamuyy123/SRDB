@@ -1,9 +1,14 @@
-package com.yq.srdb.backend.common;
+package com.yq.srdb.backend.dm.cache;
 
+import com.yq.srdb.backend.common.Error;
+
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 //引用计数法
 public abstract class AbstractCache<T> {
@@ -12,7 +17,7 @@ public abstract class AbstractCache<T> {
     private Map<Long,T> cache;
 
     //资源引用计数
-    private Map<Long,Integer> reference;
+    private Map<Long,Integer> references;
 
     //资源是否正在从数据源获取（避免多线程下重复获取）
     private Set<Long> getting;
@@ -23,6 +28,13 @@ public abstract class AbstractCache<T> {
     private int count;
     private Lock lock;
 
+    public AbstractCache(int maxResource) {
+        this.maxResource = maxResource;
+        cache = new HashMap<>();
+        references = new HashMap<>();
+        getting = new HashSet<>();
+        lock = new ReentrantLock();
+    }
     //资源不存在时获取
     protected abstract T getForCache(long key);
 
@@ -67,7 +79,7 @@ public abstract class AbstractCache<T> {
                     cache.put(key,t);
                     //getting设为false
                     getting.remove(key);
-                    reference.put(key,1);
+                    references.put(key,1);
                     lock.unlock();
                     return t;
 
@@ -81,14 +93,14 @@ public abstract class AbstractCache<T> {
     protected void release(long key){
         lock.lock();
         try{
-            int ref = reference.get(key)-1;
+            int ref = references.get(key)-1;
             if(ref==0){
                 releaseForCache(cache.get(key));
-                reference.remove(key);
+                references.remove(key);
                 cache.remove(key);
                 count--;
             }else{
-                reference.put(key,ref);
+                references.put(key,ref);
             }
         }finally {
             lock.unlock();
@@ -103,7 +115,7 @@ public abstract class AbstractCache<T> {
             for (Long key : keySet) {
                 release(key);
                 cache.remove(key);
-                reference.remove(key);
+                references.remove(key);
             }
         }finally {
             lock.unlock();

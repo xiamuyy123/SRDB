@@ -34,7 +34,7 @@ public interface TransactionManger {
     void close();
 
     //创建新的xid文件并生产txm
-    static TransactionMangerImpl create(String path){
+    static TransactionManger create(String path){
         File file = new File(path + TransactionMangerImpl.XID_SUFFIX);
         try {
             if(!file.createNewFile()){
@@ -63,12 +63,13 @@ public interface TransactionManger {
         } catch (IOException e) {
             Panic.panic(e);
         }
+//        System.out.println(file.length());
         return new TransactionMangerImpl(randomAccessFile,fileChannel);
 
 
     }
     //根据已有xid文件创建txm
-    static TransactionMangerImpl open(String path){
+    static TransactionManger open(String path){
         File file = new File(path + TransactionMangerImpl.XID_SUFFIX);
 
         if(!file.exists()){
