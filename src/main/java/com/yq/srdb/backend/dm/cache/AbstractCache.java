@@ -94,6 +94,7 @@ public abstract class AbstractCache<T> {
         lock.lock();
         try{
             int ref = references.get(key)-1;
+            //引用数为0（无人使用）
             if(ref==0){
                 releaseForCache(cache.get(key));
                 references.remove(key);

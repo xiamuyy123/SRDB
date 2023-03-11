@@ -78,7 +78,7 @@ public class PageCacheImpl extends AbstractCache<Page> implements PageCache {
 
     @Override
     public int newPage(byte[] data) {
-        int pageNo = pageNumbers.getAndIncrement();
+        int pageNo = pageNumbers.incrementAndGet();
         PageImpl page = new PageImpl(pageNo, data, null);
         this.flushPage(page);  // 新建的页面需要立刻写回
         return pageNo;
