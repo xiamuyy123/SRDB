@@ -36,7 +36,7 @@ public abstract class AbstractCache<T> {
         lock = new ReentrantLock();
     }
     //资源不存在时获取
-    protected abstract T getForCache(long key);
+    protected abstract T getForCache(long key) throws Exception;
 
     //资源驱逐时的写回
     protected abstract void releaseForCache(T t);
@@ -45,7 +45,9 @@ public abstract class AbstractCache<T> {
         while (true){
             //缓存有，直接返回
             if(cache.containsKey(key)){
-                return cache.get(key);
+                T t = cache.get(key);
+                references.put(key,references.get(key)+1);
+                return t;
             }else{
                 //缓存无
                 //先上锁

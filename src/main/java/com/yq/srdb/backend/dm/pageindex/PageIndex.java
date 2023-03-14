@@ -20,7 +20,7 @@ public class PageIndex {
 
     private Lock lock;
 
-    private PageIndex(){
+    public PageIndex(){
         lock =  new ReentrantLock();
         lists = new List[INTERVAL_NUMS+1];
         for(int i =0;i<INTERVAL_NUMS+1;i++){

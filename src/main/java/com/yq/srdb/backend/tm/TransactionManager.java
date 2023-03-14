@@ -2,7 +2,6 @@ package com.yq.srdb.backend.tm;
 
 import com.yq.srdb.backend.common.Error;
 import com.yq.srdb.backend.utils.Panic;
-import com.yq.srdb.backend.utils.Parser;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,7 +10,7 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
-public interface TransactionManger {
+public interface TransactionManager {
     //开启事务
     long begin();
 
@@ -34,8 +33,8 @@ public interface TransactionManger {
     void close();
 
     //创建新的xid文件并生产txm
-    static TransactionManger create(String path){
-        File file = new File(path + TransactionMangerImpl.XID_SUFFIX);
+    static TransactionManager create(String path){
+        File file = new File(path + TransactionManagerImpl.XID_SUFFIX);
         try {
             if(!file.createNewFile()){
                 Panic.panic(Error.FileExistsException);
@@ -56,7 +55,7 @@ public interface TransactionManger {
             Panic.panic(e);
         }
         //新建空header
-        ByteBuffer byteBuffer = ByteBuffer.wrap(new byte[TransactionMangerImpl.XID_HEADER_LENGTH]);
+        ByteBuffer byteBuffer = ByteBuffer.wrap(new byte[TransactionManagerImpl.XID_HEADER_LENGTH]);
         try {
             fileChannel.position(0);
             fileChannel.write(byteBuffer);
@@ -64,13 +63,13 @@ public interface TransactionManger {
             Panic.panic(e);
         }
 //        System.out.println(file.length());
-        return new TransactionMangerImpl(randomAccessFile,fileChannel);
+        return new TransactionManagerImpl(randomAccessFile,fileChannel);
 
 
     }
     //根据已有xid文件创建txm
-    static TransactionManger open(String path){
-        File file = new File(path + TransactionMangerImpl.XID_SUFFIX);
+    static TransactionManager open(String path){
+        File file = new File(path + TransactionManagerImpl.XID_SUFFIX);
 
         if(!file.exists()){
             Panic.panic(Error.FileNotExistsException);
@@ -90,7 +89,7 @@ public interface TransactionManger {
         }
         try {
             fileChannel.position(0);
-            ByteBuffer byteBuffer = ByteBuffer.wrap(new byte[TransactionMangerImpl.XID_HEADER_LENGTH]);
+            ByteBuffer byteBuffer = ByteBuffer.wrap(new byte[TransactionManagerImpl.XID_HEADER_LENGTH]);
             fileChannel.read(byteBuffer);
 
         } catch (IOException e) {
@@ -98,7 +97,7 @@ public interface TransactionManger {
         }
 
 
-        return new TransactionMangerImpl(randomAccessFile,fileChannel);
+        return new TransactionManagerImpl(randomAccessFile,fileChannel);
 
 
     }

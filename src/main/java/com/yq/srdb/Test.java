@@ -1,8 +1,7 @@
 package com.yq.srdb;
 
-import com.yq.srdb.backend.tm.TransactionManger;
-import com.yq.srdb.backend.tm.TransactionMangerImpl;
-import com.yq.srdb.backend.utils.Parser;
+import com.yq.srdb.backend.tm.TransactionManager;
+
 import java.nio.ByteBuffer;
 
 public class Test {
@@ -15,7 +14,7 @@ public class Test {
 //        long tx = transactionManger.begin();
 //        System.out.println(transactionManger.isActive(tx));
 //        transactionMa
-        TransactionManger.create("test1");
+        TransactionManager.create("test1");
 
     }
 

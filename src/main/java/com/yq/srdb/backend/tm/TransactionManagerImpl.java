@@ -11,7 +11,7 @@ import java.nio.channels.FileChannel;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class TransactionMangerImpl implements TransactionManger{
+public class TransactionManagerImpl implements TransactionManager {
 
     //XID文件长度
     static final int XID_HEADER_LENGTH = 8;
@@ -38,7 +38,7 @@ public class TransactionMangerImpl implements TransactionManger{
     //计数器锁
     private Lock counterLock;
 
-    public TransactionMangerImpl(RandomAccessFile randomAccessFile, FileChannel fileChannel) {
+    public TransactionManagerImpl(RandomAccessFile randomAccessFile, FileChannel fileChannel) {
         file = randomAccessFile;
         fc = fileChannel;
         counterLock = new ReentrantLock();

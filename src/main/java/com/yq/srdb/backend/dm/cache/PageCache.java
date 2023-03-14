@@ -17,6 +17,8 @@ public interface PageCache {
     int newPage(byte[] data);
     //获取页面
     Page getPage(int pageNo) throws Exception;
+    //获取页面数量
+    int getPageNumber();
     //释放页面
     void release(Page page);
     //关闭缓存

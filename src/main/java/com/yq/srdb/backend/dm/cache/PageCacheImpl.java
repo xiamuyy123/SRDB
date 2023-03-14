@@ -116,7 +116,8 @@ public class PageCacheImpl extends AbstractCache<Page> implements PageCache {
         pageNumbers.set(maxPageNo);
 
     }
-    private int getPageNumber(){
+    @Override
+    public int getPageNumber(){
         return this.pageNumbers.get();
     }
 
