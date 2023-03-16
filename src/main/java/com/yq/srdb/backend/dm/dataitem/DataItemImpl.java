@@ -83,7 +83,7 @@ public class DataItemImpl implements DataItem{
 
     @Override
     public void release() {
-
+        dm.release(this);
     }
 
     @Override

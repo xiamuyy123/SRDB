@@ -13,6 +13,8 @@ public interface DataManager {
     long insert(long xid, byte[] data) throws Exception;
     //关闭
     void close();
+    //释放
+    void release(DataItem dataItem);
 
     //从空文件创建dm
     public static DataManager create(String path, long mem, TransactionManager tm) {

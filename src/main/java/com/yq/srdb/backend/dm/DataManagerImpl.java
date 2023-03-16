@@ -116,6 +116,12 @@ public class DataManagerImpl extends AbstractCache<DataItem> implements DataMana
         pageOne.release();
         pageCache.close();
     }
+
+    @Override
+    public void release(DataItem dataItem) {
+        super.release(dataItem.getUid());
+    }
+
     // 在创建文件时初始化PageOne
     void initPageOne() {
         int pgno = pageCache.newPage(FirstPage.init());
