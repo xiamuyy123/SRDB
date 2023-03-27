@@ -6,6 +6,13 @@ import com.yq.srdb.backend.tm.TransactionManager;
 //隔离级别可见性
 public class Visibility {
 
+    public static boolean isVisible(TransactionManager tm, Transaction t, Entry e) {
+        if(t.level == 0) {
+            return readCommitted(tm, t, e);
+        } else {
+            return repeatableRead(tm, t, e);
+        }
+    }
     //读已提交
 
     /**
@@ -73,5 +80,16 @@ public class Visibility {
         }
         return false;
 
+    }
+    //RR级别下版本跳跃问题
+    public static boolean isVersionSkip(TransactionManager tm, Transaction t, Entry e) {
+        //获取修该记录的事务id
+        long xmax = e.getXmax();
+        if(t.level == 0) {
+            return false;
+        } else {
+            //判断该事务是否对本事务可见
+            return tm.isCommitted(xmax) && (xmax > t.xid || t.isInSnapshot(xmax));
+        }
     }
 }

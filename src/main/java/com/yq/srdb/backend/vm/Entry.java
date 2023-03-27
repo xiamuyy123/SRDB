@@ -17,10 +17,25 @@ public class Entry {
     //DATA起始位置
     private static final int OFFSET_DATA = OFFSET_XMAX+8;
 
+    //key值
     private long uid;
+    //对应的dt,即该entry为所在dt的data部分
     private DataItem dataItem;
     private VersionManager vm;
 
+    public long getUid() {
+        return uid;
+    }
+    public void release() {
+        ((VersionManagerImpl)vm).releaseEntry(this);
+    }
+    public static Entry newEntry(VersionManager vm, DataItem dataItem, long uid) {
+        Entry entry = new Entry();
+        entry.uid = uid;
+        entry.dataItem = dataItem;
+        entry.vm = vm;
+        return entry;
+    }
     public static Entry loadEntry(VersionManager vm, long uid) throws Exception {
         DataItem di = ((VersionManagerImpl)vm).dm.read(uid);
         return newEntry(vm, di, uid);

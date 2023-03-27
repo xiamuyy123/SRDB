@@ -7,6 +7,7 @@ public class Transaction {
     //事务id
     public long xid;
 
+    //事务隔离级别 0：RC 1:RR
     public int level;
     //当前事务开启时的活跃事务快照
     public Map<Long, Boolean> snapshot;

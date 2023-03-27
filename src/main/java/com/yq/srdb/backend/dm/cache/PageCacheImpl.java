@@ -23,7 +23,7 @@ public class PageCacheImpl extends AbstractCache<Page> implements PageCache {
     private RandomAccessFile file;
     private FileChannel fc;
 
-    //缓存中页面数
+    //页面数
     private AtomicInteger pageNumbers;
 
 
@@ -50,7 +50,7 @@ public class PageCacheImpl extends AbstractCache<Page> implements PageCache {
         int pageNo = (int)key;
         ByteBuffer byteBuffer = ByteBuffer.allocate(PAGE_SIZE);
         long offset = pageOffset(pageNo);
-
+        //读阻塞
         fileLock.lock();
         try {
             fc.position(offset);
@@ -121,6 +121,7 @@ public class PageCacheImpl extends AbstractCache<Page> implements PageCache {
         return this.pageNumbers.get();
     }
 
+    //文件写，需要阻塞
     @Override
     public void flushPage(Page page) {
         int pageNo = page.getPageNumber();

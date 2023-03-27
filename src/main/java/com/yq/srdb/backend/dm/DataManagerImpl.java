@@ -34,7 +34,11 @@ public class DataManagerImpl extends AbstractCache<DataItem> implements DataMana
         this.tm = tm;
         this.pIndex = new PageIndex();
     }
-
+    // 为xid生成update日志
+    public void logDataItem(long xid, DataItem di) {
+        byte[] log = Recover.updateLog(xid, di);
+        logger.log(log);
+    }
     @Override
     public DataItem read(long uid) throws Exception {
         DataItem dataItem = super.get(uid);

@@ -48,6 +48,9 @@ public class PageIndex {
     }
 
     public void add(int pageNo,int freeSpace){
+        if(freeSpace<=0){
+            return;
+        }
         lock.lock();
         try{
             int number = freeSpace/INTERVAL_SIZE;        //向上取整

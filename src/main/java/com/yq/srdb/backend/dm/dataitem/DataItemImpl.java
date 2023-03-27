@@ -3,6 +3,8 @@ package com.yq.srdb.backend.dm.dataitem;
 import com.yq.srdb.backend.common.SubArray;
 import com.yq.srdb.backend.dm.DataManager;
 import com.yq.srdb.backend.dm.DataManagerImpl;
+import com.yq.srdb.backend.dm.Recover;
+import com.yq.srdb.backend.dm.logger.Logger;
 import com.yq.srdb.backend.dm.page.Page;
 
 import java.util.concurrent.locks.Lock;
@@ -34,7 +36,9 @@ public class DataItemImpl implements DataItem{
 //    private DataManagerImpl dm;
     private long uid;
     private Page page;
-    private DataManager dm;
+    private DataManagerImpl dm;
+
+    Logger logger;
 
     public DataItemImpl(SubArray subArray, byte[] bytes, Page page, long uid, DataManagerImpl dm) {
         this.raw = subArray;
@@ -78,6 +82,7 @@ public class DataItemImpl implements DataItem{
     //更新后的写日志操作
     @Override
     public void after(long xid) {
+        dm.logDataItem(xid, this);
         wLock.unlock();
     }
 

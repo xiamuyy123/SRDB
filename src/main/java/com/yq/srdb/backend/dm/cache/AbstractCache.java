@@ -43,8 +43,10 @@ public abstract class AbstractCache<T> {
 
     protected T get(long key) throws Exception {
         while (true){
+            lock.lock();
             //缓存有，直接返回
             if(cache.containsKey(key)){
+                lock.unlock();
                 T t = cache.get(key);
                 references.put(key,references.get(key)+1);
                 return t;
@@ -52,7 +54,7 @@ public abstract class AbstractCache<T> {
                 //缓存无
                 //先上锁
                 //有其他线程正在获取资源
-                lock.lock();
+
                 if(getting.contains(key)){
 
                     lock.unlock();
@@ -96,6 +98,7 @@ public abstract class AbstractCache<T> {
         lock.lock();
         try{
             int ref = references.get(key)-1;
+
             //引用数为0（无人使用）
             if(ref==0){
                 releaseForCache(cache.get(key));
